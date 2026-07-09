@@ -1,34 +1,29 @@
-name: CI Build
+name: Custom Samsung Build
 
 on:
   push:
-    branches: [ master, main ]
-  pull_request:
-    branches: [ master, main ]
+    branches: [ master ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+    - name: Checkout Source Code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'zulu'
+    - name: Set up Java JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'zulu'
 
-      # Handles everything cleanly in a single integrated step
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+    - name: Compile Samsung APK
+      run: ./gradlew assembleDebug -x test -x lint -x detekt
 
-      - name: Grant Execute Permission for Gradle Wrapper
-        run: chmod +x gradlew
-
-      # Safely builds the debug APK while ignoring non-critical warnings
-      - name: Build with Gradle
-
-
-
+    - name: Upload Clean Installer APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: termux-samsung-a16-build
+        path: app/build/outputs/apk/debug/**/*.apk
