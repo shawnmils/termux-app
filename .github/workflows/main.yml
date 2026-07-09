@@ -19,8 +19,11 @@ jobs:
         java-version: '17'
         distribution: 'zulu'
 
+    - name: Grant Execute Permission to Gradle
+      run: chmod +x gradlew
+
     - name: Compile Samsung APK
-      run: ./gradlew assembleDebug -x test -x lint -x detekt
+      run: ./gradlew assembleDebug -x test -x lint -x detekt --no-daemon
 
     - name: Upload Clean Installer APK
       uses: actions/upload-artifact@v4
