@@ -29,7 +29,6 @@ jobs:
 
       # Safely builds the debug APK while ignoring non-critical warnings
       - name: Build with Gradle
-        run: ./gradlew assembleDebug -x test --no-daemon
 
 
 

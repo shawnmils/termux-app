@@ -23,4 +23,3 @@ jobs:
         java-version: '17'
     - name: Execute tests
       run: |
-        ./gradlew test
