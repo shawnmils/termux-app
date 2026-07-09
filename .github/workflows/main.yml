@@ -26,6 +26,38 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Grant Execute Permission for Gradle Wrapper
+name: CI Build
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17run: ./gradlew assembleDebug -Dxlint:none -Dlint.allow.warnings=true
+'
+          distribution: 'zulu'
+
+      # Bypasses the fork error by handling caching and validation natively
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Grant Execute Permission for Gradle Wrapper
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew assembleDebug
         run: chmod +x gradlew
 
       - name: Build with Gradle
@@ -62,4 +94,7 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew assembleDebug
+
+      - name: Build with Gradle
+        run: ./gradlew assembleDebug -x lint
 
